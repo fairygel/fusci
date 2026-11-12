@@ -1,14 +1,38 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { Search, EllipsisVertical } from "lucide-react-native";
+import { Search, EllipsisVertical, SkipBack, SkipForward, Pause, Play } from "lucide-react-native";
+import { useState } from "react";
 
 export default function App() {
+  // TODO: test data, for removal
   const songs = [
-    { id: "1", name: "Midnight", duration: "3:52" },
-    { id: "2", name: "Midnight", duration: "3:52" },
-    { id: "3", name: "Midnight", duration: "3:52" },
-    { id: "4", name: "Midnight", duration: "3:52" },
+    { id: "1", name: "Midnight", duration: "3:52", isPlaying: false },
+    { id: "2", name: "Midnight", duration: "3:52", isPlaying: true },
+    { id: "3", name: "Midnight", duration: "3:52", isPlaying: false },
+    { id: "4", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "5", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "6", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "7", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "8", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "9", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "10", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "11", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "12", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "13", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "14", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "15", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "16", name: "Midnight", duration: "3:52", isPlaying: false },
+        { id: "17", name: "Midnight", duration: "3:52", isPlaying: false },
   ];
+
+  const [currentlyPlaying] = useState({
+    id: "2",
+    name: "Midnight",
+    duration: "3:52",
+    isPlaying: true,
+  });
+
+  const [isOnPause, setIsOnPause] = useState(true);
 
   return (
     <View style={styles.container}>
@@ -23,7 +47,13 @@ export default function App() {
       </View>
       <View style={styles.songList}>
         {songs.map((song) => (
-          <View style={styles.songContainer} key={song.id}>
+          <View
+            style={[
+              styles.songContainer,
+              song.isPlaying ? styles.playing : styles.notPlaying,
+            ]}
+            key={song.id}
+          >
             <View style={styles.albumCover} />
             <View style={styles.songInfo}>
               <Text style={styles.songName}>{song.name}</Text>
@@ -32,6 +62,23 @@ export default function App() {
             <EllipsisVertical />
           </View>
         ))}
+      </View>
+
+      <View
+        style={[
+          styles.currentlyPlayingContainer,
+        ]}
+      >
+        <View style={styles.albumCover} />
+        <View style={styles.songInfo}>
+          <Text style={styles.songName}>{currentlyPlaying.name}</Text>
+          <Text style={styles.songDuration}>{currentlyPlaying.duration}</Text>
+        </View>
+        <View style={styles.songControl}>
+          <SkipBack />
+          {isOnPause ? <Pause /> : <Play />}
+          <SkipForward />
+        </View>
       </View>
     </View>
   );
@@ -73,35 +120,59 @@ const styles = StyleSheet.create({
   songList: {
     marginVertical: 24,
     marginHorizontal: 16,
-    alignSelf: 'stretch',
+    alignSelf: "stretch",
     gap: 8,
-    flex: 1
+    flex: 1,
   },
   songContainer: {
-    backgroundColor: "white",
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: 8,
-    alignItems: 'center',
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
     borderRadius: 16,
     padding: 8,
   },
+  playing: {
+    backgroundColor: "green",
+  },
+  notPlaying: {
+    backgroundColor: "white",
+  },
+  currentlyPlayingContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingBottom: 32,
+    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderTopEndRadius: 24,
+    borderTopLeftRadius: 24,
+    backgroundColor: 'white',
+    gap: 8,
+  },
+  songControl: {
+    flexDirection: 'row',
+    gap: 16,
+    marginRight: 16
+  },
   albumCover: {
-    backgroundColor: 'darkgrey',
+    backgroundColor: "darkgrey",
     width: 40,
     height: 40,
-    borderRadius: 8
+    borderRadius: 8,
   },
   songInfo: {
     gap: 4,
-    flex: 1
+    flex: 1,
   },
   songName: {
-    color: '#000',
-    fontSize: 16
+    color: "#000",
+    fontSize: 16,
   },
   songDuration: {
-    color: 'darkgrey',
-    fontSize: 12
+    color: "darkgrey",
+    fontSize: 12,
   },
 });

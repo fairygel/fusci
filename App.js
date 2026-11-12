@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View, Pressable } from "react-native";
 import { Search, EllipsisVertical, SkipBack, SkipForward, Pause, Play } from "lucide-react-native";
 import { useState } from "react";
 
@@ -79,7 +79,9 @@ export default function App() {
         </View>
         <View style={styles.songControl}>
           <SkipBack />
-          {isOnPause ? <Pause /> : <Play />}
+          <Pressable onPress={() => setIsOnPause(!isOnPause)}>
+            {isOnPause ? <Pause /> : <Play />}
+          </Pressable>
           <SkipForward />
         </View>
       </View>

@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import { FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import { Search, EllipsisVertical, SkipBack, SkipForward, Pause, Play } from "lucide-react-native";
 import { useState } from "react";
 
@@ -45,14 +45,17 @@ export default function App() {
         <Search size={16} />
         <TextInput style={styles.search} placeholder="Songs, Authors..." />
       </View>
-      <View style={styles.songList}>
-        {songs.map((song) => (
+      <FlatList
+        style={styles.songList}
+        contentContainerStyle={styles.songListContent}
+        data={songs}
+        keyExtractor={(song) => song.id}
+        renderItem={({ item: song }) => (
           <View
             style={[
               styles.songContainer,
               song.isPlaying ? styles.playing : styles.notPlaying,
             ]}
-            key={song.id}
           >
             <View style={styles.albumCover} />
             <View style={styles.songInfo}>
@@ -61,8 +64,8 @@ export default function App() {
             </View>
             <EllipsisVertical />
           </View>
-        ))}
-      </View>
+        )}
+      />
 
       <View
         style={[
@@ -121,8 +124,11 @@ const styles = StyleSheet.create({
     marginVertical: 24,
     marginHorizontal: 16,
     alignSelf: "stretch",
-    gap: 8,
     flex: 1,
+  },
+  songListContent: {
+    gap: 8,
+    paddingBottom: 110,
   },
   songContainer: {
     flexDirection: "row",
